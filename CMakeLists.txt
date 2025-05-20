@@ -4,7 +4,7 @@ cmake_minimum_required (VERSION 2.9)
 # 项目信息
 project (HYBRIDALGSOLVER)
 
-# 使用 C++11  
+# 使用 C++17
 set(CMAKE_CXX_STANDARD 17)  
 
 # 强制要求指定的标准
