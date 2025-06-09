@@ -72,6 +72,7 @@ namespace solverbin{
         std::set<TernarySimulationState> SimulationCache;
         // std::map<TernarySimulationState, TernarySimulationState*> DoneCache;
         std::queue<TernarySimulationState> TODOCache;
+        std::string RegexFile;
         std::string InterStr;
         std::string WitnessStr;
         std::string Suffix;

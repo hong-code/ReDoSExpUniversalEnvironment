@@ -11,6 +11,7 @@
 #include <random>
 #include <openssl/evp.h>
 #include <queue>
+#include <chrono>
 
 #include "DetectAmbiguity.h"
 
@@ -88,10 +89,12 @@ namespace solverbin{
     NumberOfCandidates++;
     if (mkdir(Output.c_str(), 0777) == 0) {
       std::cout << "Directory created successfully: " << Output << std::endl;
-    } else {
-      std::cerr << "Error: Unable to create directory " << Output << std::endl;
-    }
-    Outfile.open(Output + "/" + std::to_string(NumberOfCandidates) + ".txt");
+    } 
+    // else {
+    //   std::cerr << "Error: Unable to create directory " << Output << std::endl;
+    // }
+    std::string attack_string_file = Output + "/" + std::to_string(NumberOfCandidates) + ".txt";
+    Outfile.open(attack_string_file);
     if (!Outfile.is_open()) {
       std::cerr << "Failed to open the file." << std::endl;
       return 0;
@@ -109,9 +112,34 @@ namespace solverbin{
       attack_string.append(LastWord); 
     Outfile << attack_string;
     std::cout << "file is closed" << std::endl;
-    Suffix.clear();
-    Outfile.close();
-    return true;
+
+    // Validate whether the candidate attack string could cause ReDoS on regex engine
+    std::string cmd = "python3 /home/HybridAlgSolver/PythonMatch/match.py " + RegexFile + " " + attack_string_file;
+    std::cout << cmd << std::endl;
+    // Get start time
+    auto start = std::chrono::high_resolution_clock::now();
+    
+    // Execute command with timeout
+    std::string timeout_cmd = "timeout 1.2s " + cmd;
+    int ret = system(timeout_cmd.c_str());
+    // Get end time 
+    auto end = std::chrono::high_resolution_clock::now();
+    
+    // Calculate duration in milliseconds
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+    if (duration.count() > 1000){
+      std::cout << "Execution time: " << duration.count() << " ms" << std::endl;
+      Suffix.clear();
+      Outfile.close();
+      return true;
+    }else{
+      cmd = "rm -rf " + attack_string_file;
+      system(cmd.c_str());
+      Suffix.clear();
+      Outfile.close();
+      NumberOfCandidates--;
+      return false;
+    }
   }
 
   bool DetectABTNFA_Lookaround::WriteInBase64() {

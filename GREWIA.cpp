@@ -61,6 +61,7 @@ int main(int argc, char* argv[]){
       auto ren = solverbin::Parer(str, true);
       ReList.emplace_back(ren.Re);
       auto kk = solverbin::DetectABTNFA_Lookaround(ren.Re, std::stoi(argv[3]), argv[2], std::stoi(argv[4]), std::stoi(argv[5]), std::stoi(argv[6]), 0);
+      kk.RegexFile = argv[1];
       auto k1 = kk.IsABT(kk.SSBegin);
       if (k1){
         std::cout <<  "prefix: " << kk.InterStr << std::endl;
