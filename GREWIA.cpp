@@ -10,7 +10,7 @@
 
 int main(int argc, char* argv[]){
 
-  if (argc != 7){
+  if (argc != 8){
     std::cout << "parameter error" << std::endl;
     std::cout << "Usage: ./GREWIA [RegexFile] [OutputDirectory] [AttackStringLength] [SimplifiedModeOn] [DecrementalOn] [MatchingFunction]\n" << std::endl;
     std::cout << "[RegexFile]: Path of a file which contain a regex.\n" << std::endl;
@@ -19,6 +19,7 @@ int main(int argc, char* argv[]){
     std::cout << "[SimplifiedModeOn]: Set to 1 indicate letting GREWIA generate a attack strings; Set to 0 indicate letting GREWIA generate a series of attack strings.\n" << std::endl;
     std::cout << "[DecrementalOn]: Set to 1 indicate Decremental method is on and vice verse.\n" << std::endl;
     std::cout << "[MatchingFunction]: Set to 1 indicate targeting to partialmatch; Set to 0 indicate targeting to fullmatch.\n" << std::endl;
+    std::cout << "[Regex Engine]: Set to a specific regex engine which are Java, JavaScript, Perl, PHP, Python, Boost, C#. And the candidate attack string will be verified in those engines. \n" << std::endl;
     return 0;
   }
   std::ifstream infile;
@@ -62,6 +63,8 @@ int main(int argc, char* argv[]){
       ReList.emplace_back(ren.Re);
       auto kk = solverbin::DetectABTNFA_Lookaround(ren.Re, std::stoi(argv[3]), argv[2], std::stoi(argv[4]), std::stoi(argv[5]), std::stoi(argv[6]), 0);
       kk.RegexFile = argv[1];
+      kk.Regex = line;
+      kk.RegexEngine = argv[7];
       auto k1 = kk.IsABT(kk.SSBegin);
       if (k1){
         std::cout <<  "prefix: " << kk.InterStr << std::endl;
