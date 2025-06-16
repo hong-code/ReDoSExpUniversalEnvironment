@@ -18,8 +18,20 @@
 
 namespace solverbin{
 
+  std::string base64_encode(const std::string &input) {
+      // 计算编码后的大小
+      int len = 4 * ((input.length() + 2) / 3);
+      char *encoded = new char[len + 1];
 
-  	void DetectABTNFA_Lookaround::ComputeAlphabet_Colormap(uint8_t* ByteMap, std::set<uint8_t> &Alphabetp){
+      // 编码
+      EVP_EncodeBlock((unsigned char*)encoded, (const unsigned char*)input.c_str(), input.length());
+
+      std::string result(encoded);
+      delete[] encoded;
+      return result;
+  }
+
+  void DetectABTNFA_Lookaround::ComputeAlphabet_Colormap(uint8_t* ByteMap, std::set<uint8_t> &Alphabetp){
 		std::set<uint8_t> color_set;
 		color_set.insert(ByteMap[0]);
     std::vector<uint8_t> RuneRange;
@@ -44,18 +56,34 @@ namespace solverbin{
 		}
 	}
 
-  std::string base64_encode(const std::string &input) {
-    // 计算编码后的大小
-    int len = 4 * ((input.length() + 2) / 3);
-    char *encoded = new char[len + 1];
-
-    // 编码
-    EVP_EncodeBlock((unsigned char*)encoded, (const unsigned char*)input.c_str(), input.length());
-
-    std::string result(encoded);
-    delete[] encoded;
-    return result;
-}
+  bool DetectABTNFA_Lookaround::Verify(std::string& attack_string_file){
+    if (RegexEngine == "Java"){
+      std::string cmd = "java -jar /home/HybridAlgSolver/JavaMatch/JavaMatch.jar " + base64_encode(Regex) + " " + attack_string_file;
+      system(cmd.c_str());
+    }
+    else if (RegexEngine == "JavaScript"){
+      std::string cmd = "node /home/HybridAlgSolver/JavaScriptMatch/JavaScriptMatch.js " + base64_encode(Regex) + " " + attack_string_file;
+    }
+    else if (RegexEngine == "Perl"){
+      std::string cmd = "perl /home/HybridAlgSolver/PerlMatch/PerlMatch.pl " + base64_encode(Regex) + " " + attack_string_file;
+    }
+    else if (RegexEngine == "PHP"){
+      std::string cmd = "php /home/HybridAlgSolver/PHPMatch/PHPMatch.php " + base64_encode(Regex) + " " + attack_string_file;
+    }
+    else if (RegexEngine == "Python"){  
+      std::string cmd = "python3 /home/HybridAlgSolver/PythonMatch/match.py " + base64_encode(Regex) + " " + attack_string_file;
+    }
+    else if (RegexEngine == "Boost"){
+      std::string cmd = "boost /home/HybridAlgSolver/BoostMatch/BoostMatch.cpp " + base64_encode(Regex) + " " + attack_string_file;
+    }
+    else if (RegexEngine == "C#"){    
+      std::string cmd = "dotnet /home/HybridAlgSolver/CSharpMatch/CSharpMatch.dll " + base64_encode(Regex) + " " + attack_string_file;
+    }
+    else{
+      std::cout << "Regex engine not supported" << std::endl;
+      return false;
+    }
+  }
 
   void DetectABTNFA_Lookaround::DumpAlphabet(std::set<uint8_t>& A){
     std::cout << "The alphabet: ";

@@ -72,6 +72,8 @@ namespace solverbin{
         std::set<TernarySimulationState> SimulationCache;
         // std::map<TernarySimulationState, TernarySimulationState*> DoneCache;
         std::queue<TernarySimulationState> TODOCache;
+        std::string Regex;
+        std::string RegexEngine;
         std::string RegexFile;
         std::string InterStr;
         std::string WitnessStr;
@@ -101,5 +103,6 @@ namespace solverbin{
         bool IsABT(TernarySimulationState s);
         bool DetectABTOFS(TernarySimulationState s, std::set<TernarySimulationState> TSSET);
         bool DetectABTOFSDeepFirst(TernarySimulationState TSS_Ex, std::set<TernarySimulationState> TSSET);
+        bool Verify(std::string& attack_string);
     };
 }
