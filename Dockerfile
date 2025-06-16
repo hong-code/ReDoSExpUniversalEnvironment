@@ -20,6 +20,7 @@ RUN apt-get update
 RUN apt-get install -y \
     build-essential \
     make \
+    cmake \
     git \
     && rm -rf /var/lib/apt/lists/*
 
@@ -134,6 +135,7 @@ COPY ruby/ /app/ruby/
 COPY rust/ /app/rust/
 COPY srm/ /app/srm/
 COPY Dockerfile /app/
+COPY GREWIA/ /app/GREWIA/
 
 # Set proper ownership of files
 RUN chown -R developer:developer /app
@@ -246,4 +248,10 @@ RUN make test || echo "SRM C# tests completed"
 # =============================================================================
 
 # Set default command to run C tests when container starts
+
+# Build GREWIA
+WORKDIR /app/GREWIA
+RUN mkdir build && cd build && cmake .. && make -j
+
+
 WORKDIR /app
