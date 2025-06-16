@@ -127,7 +127,7 @@ namespace solverbin{
     
     // Calculate duration in milliseconds
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-    if (duration.count() > 1000){
+    if (duration.count() >= 1000){
       std::cout << "Execution time: " << duration.count() << " ms" << std::endl;
       Suffix.clear();
       Outfile.close();
