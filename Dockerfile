@@ -20,8 +20,7 @@ RUN apt-get update
 RUN apt-get install -y \
     build-essential \
     make \
-    git \
-    && rm -rf /var/lib/apt/lists/*
+    git 
 
 # Install network and download tools
 RUN apt-get install -y \
@@ -147,7 +146,6 @@ COPY rust/ /app/rust/
 COPY srm/ /app/srm/
 COPY re2/ /app/re2/
 COPY Dockerfile /app/
-COPY GREWIA/ /app/GREWIA/
 
 # Set proper ownership of files
 RUN chown -R developer:developer /app
@@ -290,10 +288,4 @@ RUN make test || echo "RE2 tests completed"
 # =============================================================================
 
 # Set default command to run C tests when container starts
-
-# Build GREWIA
-WORKDIR /app/GREWIA
-RUN mkdir build && cd build && cmake .. && make -j
-
-
 WORKDIR /app
