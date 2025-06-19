@@ -8,16 +8,16 @@
 - [x] Java 11
 - [x] Node.js 14
 - [x] Node.js 21
-  - [ ] enable non-backtracking
+  - [x] enable non-backtracking
 - [x] Perl
 - [x] PHP
 - [x] Python
 - [x] Ruby
 - [x] Rust
 - [x] SRM C#
-- [ ] awk/sed
-- [ ] grep
-- [ ] hyperscan
+- [x] awk/sed
+- [x] grep
+- [x] hyperscan
 - [ ] re2
 
 # Tools
